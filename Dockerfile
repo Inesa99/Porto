@@ -13,7 +13,7 @@ COPY . .
 
 # Կառուցում ենք ու publish անում
 WORKDIR /src/Porto
-RUN dotnet publish -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish --no-restore
 
 # Runtime image՝ ASP.NET 8
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
@@ -21,5 +21,4 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 EXPOSE 80
-ENTRYPOINT ["sh", "-c", "dotnet ef database update -c ApplicationContext && dotnet Porto.dll"]
-
+ENTRYPOINT ["dotnet", "Porto.dll"]
