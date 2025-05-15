@@ -1,14 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /app
+COPY Porto/Porto.sln ./Porto/
+COPY Porto/Porto.csproj ./Porto/
 
-COPY Porto/*.csproj ./
-RUN dotnet restore
+RUN dotnet restore ./Porto/Porto.csproj
 
-COPY . ./
-RUN dotnet publish -c Release -o out
+COPY Porto/ ./Porto/
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /src/Porto
+RUN dotnet publish -c Release -o /app/out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/out .
 
