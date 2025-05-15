@@ -1,20 +1,19 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Սկզբում միայն .sln և .csproj ֆայլերը
-COPY Porto/Porto.sln ./
-COPY Porto/Porto.csproj ./Porto/
+COPY Porto/Porto.sln ./Porto.sln
 
-# Restore dependencies
-RUN dotnet restore ./Porto/Porto.csproj
-
-# Հիմա ամբողջ լուծումը
+# Պատճենել բոլոր ենթապրոյեկտները, որոնք դու ունես ֆայլային կառուցվածքում՝ Porto.App, Porto.Common, Porto.Data, Porto (և այլն)
+COPY Porto.App/ ./Porto.App/
+COPY Porto.Common/ ./Porto.Common/
+COPY Porto.Data/ ./Porto.Data/
 COPY Porto/ ./Porto/
+
+RUN dotnet restore ./Porto.sln
 
 WORKDIR /src/Porto
 RUN dotnet publish -c Release -o /app/out
 
-# Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/out .
