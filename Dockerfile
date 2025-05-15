@@ -1,22 +1,25 @@
-# Կառուցման փուլը՝ .NET 8 SDK
+# Բազային պատկեր՝ .NET 8 SDK
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Քոփի ենք անում CSPROJ ֆայլը առանձին, restore անելիս cache օգտագործելու համար
-COPY *.csproj ./
+# Քոփի ենք անում .csproj ֆայլը
+COPY Porto/Porto.csproj ./Porto/
+WORKDIR /src/Porto
 RUN dotnet restore
 
-# Քոփի ենք անում մնացածը
-COPY . ./
-RUN dotnet publish -c Release -o out
+# Քոփի ենք անում մնացած ֆայլերը
+WORKDIR /src
+COPY . .
 
-# Վերջնական փուլը՝ .NET 8 ASP.NET Runtime
+# Կառուցում ենք ու publish անում
+WORKDIR /src/Porto
+RUN dotnet publish -c Release -o /app/publish
+
+# Runtime image՝ ASP.NET 8
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /app/out .
+COPY --from=build /app/publish .
 
-# Եթե Render-ը օգտագործում է 80 պորտը
 EXPOSE 80
-
-# Սկսում ենք հավելվածը
 ENTRYPOINT ["dotnet", "Porto.dll"]
+
