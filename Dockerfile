@@ -21,5 +21,5 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 EXPOSE 80
-ENTRYPOINT ["dotnet", "Porto.dll"]
+ENTRYPOINT ["sh", "-c", "dotnet ef database update -c ApplicationContext && dotnet Porto.dll"]
 
