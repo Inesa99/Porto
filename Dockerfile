@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Սկզբում միայն .sln և .csproj ֆայլերը
-COPY Porto.sln .
+COPY Porto/Porto.sln ./
 COPY Porto/Porto.csproj ./Porto/
 
 # Restore dependencies
