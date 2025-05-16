@@ -19,6 +19,11 @@ ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Apply EF Core migration
 WORKDIR /src/Porto
+
+# Add migration (temporary name like 'AutoMigration')
+RUN dotnet ef migrations add AutoMigration -c ApplicationContext
+
+# Update database
 RUN dotnet ef database update -c ApplicationContext
 
 # Publish app
@@ -34,3 +39,4 @@ COPY --from=build /app/publish .
 EXPOSE 80
 
 ENTRYPOINT ["dotnet", "Porto.dll"]
+
