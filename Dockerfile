@@ -13,8 +13,14 @@ COPY . .
 WORKDIR /src/Porto
 RUN dotnet publish -c Release -o /app/publish
 
-# Runtime Stage with SDK for EF CLI
+# Runtime Stage with EF CLI installed
 FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+# Install EF Core CLI
+RUN dotnet tool install --global dotnet-ef
+
+# Make EF CLI available in PATH
+ENV PATH="$PATH:/root/.dotnet/tools"
 
 WORKDIR /app
 COPY --from=build /app/publish .
