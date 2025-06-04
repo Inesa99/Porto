@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Porto.App.Interfaces;
 using Porto.App.Services;
@@ -9,14 +11,14 @@ using Porto.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure database
+// Configure database connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+
 builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(connectionString));
 
+// Add Identity with roles
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -26,9 +28,28 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
 })
-.AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationContext>()
 .AddDefaultTokenProviders();
 
+// Add external Google login (will use the default Identity.Application scheme internally)
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+        options.Scope.Add("profile");
+        options.Scope.Add("email");
+
+        options.Events.OnRedirectToAuthorizationEndpoint = context =>
+        {
+            context.Response.Redirect(context.RedirectUri + "&prompt=select_account");
+            return Task.CompletedTask;
+        };
+    });
+
+
+// Your other services
 builder.Services.AddScoped<IEvent, EventService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHostedService<ChatCleanupService>();
@@ -40,15 +61,12 @@ builder.Services.AddSignalR()
         options.ClientTimeoutInterval = TimeSpan.FromMinutes(1);
     });
 
-builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
-    .AddCookie();
-
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Seed Admin User
+// Seed admin user (keep as is)
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -96,19 +114,31 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-// Localization
+// Localization setup
 var supportedCultures = new[] { "en", "pt-PT" };
 var localizationOptions = new RequestLocalizationOptions()
     .SetDefaultCulture("en")
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
+
 app.UseRequestLocalization(localizationOptions);
 app.UseMiddleware<LocalizationMiddleware>();
+
+var forwardedOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost,
+    RequireHeaderSymmetry = false,
+    ForwardLimit = null
+};
+forwardedOptions.KnownNetworks.Clear(); // allow any reverse proxy (e.g. DevTunnel)
+forwardedOptions.KnownProxies.Clear();
+
+app.UseForwardedHeaders(forwardedOptions);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Route config
+// Routes and endpoints
 app.MapAreaControllerRoute(
     name: "admin",
     areaName: "Admin",
@@ -118,7 +148,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages(); // ✅ Identity scaffolding (login/register) uses this
+app.MapRazorPages();
 app.MapHub<ChatHub>("/chathub");
 
 app.Run();

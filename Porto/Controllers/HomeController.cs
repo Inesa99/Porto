@@ -57,10 +57,10 @@ namespace Porto.Controllers
 
             return RedirectToAction("Index");
         }
-        private readonly string fromEmail = "inesamkrtchyan9999@gmail.com";
-        private readonly string password = "lhwd zttk xque sajp";
+        private readonly string fromEmail = "kurdyangaya@gmail.com";
+        private readonly string password = "iwpo ljnf zqbu ylty";
 
-        public void SendEmail(string subject, string body, string toEmail = "inesamkrtchyan9999@gmail.com")
+        public void SendEmail(string subject, string body, string toEmail = "kurdyangaya@gmail.com")
         {
             var fromAddress = new MailAddress(fromEmail, "Your Name");
             var toAddress = new MailAddress(toEmail);

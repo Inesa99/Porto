@@ -812,6 +812,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const subcategoriesDiv = document.getElementById('subcategories');
     const chatMessagesDiv = document.getElementById('chat-messages');
 
+    // Function for smooth scrolling to chat area
+    function scrollToChatAnswer() {
+        if (chatMessagesDiv) {
+            chatMessagesDiv.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }
+
+    // Function to scroll to the entire chat area
+    function scrollToChatArea() {
+        const chatArea = document.querySelector('.chat-area');
+        if (chatArea) {
+            chatArea.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+    }
+
     // Add click event listeners to each category item
     categoryItems.forEach(item => {
         item.addEventListener('click', function () {
@@ -908,13 +929,17 @@ document.addEventListener('DOMContentLoaded', function () {
             item.addEventListener('click', function () {
                 const questionId = this.getAttribute('data-question');
                 showAnswer(category, subcategoryId, questionId);
+
+                // Scroll to chat area when question is clicked
+                setTimeout(() => {
+                    scrollToChatArea();
+                }, 200);
             });
         });
     }
 
-    // Function to show answer for a selected question
+    // Function to show answer for a selected question (UPDATED WITH SCROLLING)
     function showAnswer(category, subcategoryId, questionId) {
-
         const categoryData = chatbotData[category];
         if (!categoryData) return;
 
@@ -926,20 +951,28 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-
         const lang = currentLanguage;
 
         addMessage('user', question.question[lang]);
-
         addTypingIndicator();
+
+        // Scroll to chat area immediately after user message
+        setTimeout(() => {
+            scrollToChatAnswer();
+        }, 100);
 
         setTimeout(() => {
             removeTypingIndicator();
             addMessage('bot', question.answer[lang]);
+
+            // Scroll again after bot response is added
+            setTimeout(() => {
+                scrollToChatAnswer();
+            }, 100);
         }, 3000);
     }
 
-    // Function to add a message to the chat
+    // Function to add a message to the chat (UPDATED WITH AUTO-SCROLL)
     function addMessage(role, content) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${role}-message`;
@@ -947,8 +980,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         chatMessagesDiv.appendChild(messageDiv);
 
-        // Scroll to the bottom of the chat
-        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        // Auto-scroll to the latest message
+        setTimeout(() => {
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        }, 50);
     }
 
     // Function to go back to subcategories

@@ -65,10 +65,13 @@
                             <span>Or</span>
                         </div>
 
-                        <button class="google-button">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo">
-                            <span>Sign Up with Google</span>
-                        </button>
+                        <form method="post" asp-page="./ExternalLogin" asp-route-provider="Google" asp-route-returnUrl="/" class="d-inline">
+                            <button type="submit" class="google-button">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo">
+                                <span>Sign Up with Google</span>
+                            </button>
+                        </form>
+
                     </div>
                 </div>
 

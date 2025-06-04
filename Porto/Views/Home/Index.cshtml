@@ -40,12 +40,53 @@
                         Access social services, career opportunities, and community connections—everything you need in
                         Porto
                     </p>
-                    <a href="#features-section" class="btn btn-light btn-lg">Get Started</a>
+                    <a href="@Url.Action("Integrate", "Home")" class="btn btn-light btn-lg">Get Started</a>
                 </div>
             </div>
         </div>
     </section>
+    <!-- Features Section -->
+    <section class="features-section" id="features-section">
+        <div class="container">
+            <div class="features-grid">
+                <!-- Live Feature -->
+                <div class="feature-card live-card">
+                    <div class="feature-content">
+                        <h2>Live</h2>
+                        <p>Find housing assistance, healthcare services, legal aid, and social support to build a secure and stable life in Porto.</p>
+                        <a href=@Url.Action("Live") class="btn btn-primary">Explore</a>
+                    </div>
+                    <div class="feature-image image-live">
+                        <img src="~/Images/porto1.png" alt="Live illustration" class="img-fluid">
+                    </div>
+                </div>
 
+                <!-- Work Feature -->
+                <div class="feature-card work-card">
+                    <div class="feature-content">
+                        <h2>Work</h2>
+                        <p>Explore job opportunities and career guidance and to grow professionally.</p>
+                        <a href=@Url.Action("Work") class="btn btn-primary">Explore</a>
+                    </div>
+                    <div class="feature-image  image-work">
+                        <img src="~/Images/porto2.png" alt="Work illustration" class="img-fluid">
+                    </div>
+                </div>
+
+                <!-- Integrate Feature -->
+                <div class="feature-card integrate-card">
+                    <div class="feature-image image-integrate">
+                        <img src="~/Images/porto3.png" alt="Integrate illustration" class="img-fluid">
+                    </div>
+                    <div class="feature-content">
+                        <h2>Integrate</h2>
+                        <p>Meet new people, make connections, and become part of local communities.</p>
+                        <a href=@Url.Action("Integrate") class="btn btn-primary">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <!-- Community Initiative Section -->
     <section class="community-section">
         <div class="container">
@@ -117,49 +158,6 @@
             </div>
         </div>
     </section>
-
-    <!-- Features Section -->
-    <section class="features-section" id="features-section">
-        <div class="container">
-            <div class="features-grid">
-                <!-- Live Feature -->
-                <div class="feature-card live-card">
-                    <div class="feature-content">
-                        <h2>Live</h2>
-                        <p>Find housing assistance, healthcare services, legal aid, and social support to build a secure and stable life in Porto.</p>
-                        <a href=@Url.Action("Live") class="btn btn-primary">Explore</a>
-                    </div>
-                    <div class="feature-image image-live">
-                        <img src="~/Images/porto1.png" alt="Live illustration" class="img-fluid">
-                    </div>
-                </div>
-
-                <!-- Work Feature -->
-                <div class="feature-card work-card">
-                    <div class="feature-content">
-                        <h2>Work</h2>
-                        <p>Explore job opportunities and career guidance and to grow professionally.</p>
-                        <a href=@Url.Action("Work") class="btn btn-primary">Explore</a>
-                    </div>
-                    <div class="feature-image  image-work">
-                        <img src="~/Images/porto2.png" alt="Work illustration" class="img-fluid">
-                    </div>
-                </div>
-
-                <!-- Integrate Feature -->
-                <div class="feature-card integrate-card">
-                    <div class="feature-image image-integrate">
-                        <img src="~/Images/porto3.png" alt="Integrate illustration" class="img-fluid">
-                    </div>
-                    <div class="feature-content">
-                        <h2>Integrate</h2>
-                        <p>Meet new people, make connections, and become part of local communities.</p>
-                        <a href=@Url.Action("Integrate") class="btn btn-primary">Explore</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <!-- Contact Section -->
     <section class="contact-section">
         <div class="container">
@@ -169,18 +167,23 @@
 
                     <div class="col-lg-7 contact-form-col">
                         <form asp-action="ContactUs" asp-controller="Home" method="post">
-                            <h2>@AppRes.ContactUsSubject</h2>
-                            <p class="contact-subtitle">@AppRes.ContactUsSectionText</p>
+                            <h2>
+                                Contact Us
+                           </h2>
+                            <p class="contact-subtitle">
+                                How can we help you?
+
+                            </p>
 
                             <!-- Custom select group -->
                             <div class="contact-options">
                                 <div class="option-btn active" data-value="@AppRes.IndividualUser">
-                                    <div>@(AppRes.IndividualUser ?? "I'm an individual user")</div>
-                                    <div class="option-subtitle">@(AppRes.IndividualUserText ?? "looking for support or information")</div>
+                                    <div>I'm an individual user</div>
+                                    <div class="option-subtitle"> looking for support or information</div>
                                 </div>
                                 <div class="option-btn" data-value="@AppRes.EventOrganizer">
-                                    <div>@(AppRes.EventOrganizer ?? "I'm an event organizer")</div>
-                                    <div class="option-subtitle">@(AppRes.EventOrganizerText ?? "wanting to share an opportunity")</div>
+                                    <div>I'm an event organizer</div>
+                                    <div class="option-subtitle">wanting to share an opportunity</div>
                                 </div>
                             </div>
 
