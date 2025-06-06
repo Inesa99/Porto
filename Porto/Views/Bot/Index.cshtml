@@ -7,6 +7,206 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <link href="~/css/main.css" rel="stylesheet" />
 <link href="~/css/live.css" rel="stylesheet" />
+<style>
+
+    body {
+        margin: 0 !important;
+    }
+    /* Form Styling */
+    .new {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+        .new label {
+            display: block;
+            font-weight: 600;
+            color: #0a3c6e;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .new select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0f0ff;
+            border-radius: 8px;
+            background-color: #f0f7ff;
+            color: #064b85;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230a3c6e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 15px) center;
+            padding-right: 40px;
+        }
+
+            .new select:focus {
+                border-color: #0e88e2;
+                box-shadow: 0 0 0 3px rgba(14, 136, 226, 0.2);
+                outline: none;
+            }
+
+            .new select option {
+                padding: 10px;
+            }
+
+        .new input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0f0ff;
+            border-radius: 8px;
+            background-color: #f0f7ff;
+            color: #064b85;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+            .new input[type="text"]:focus {
+                border-color: #0e88e2;
+                box-shadow: 0 0 0 3px rgba(14, 136, 226, 0.2);
+                outline: none;
+            }
+
+        .new button {
+            background: linear-gradient(135deg, #0e88e2 0%, #064b85 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .new button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                background: linear-gradient(135deg, #0270c4 0%, #0a3c6e 100%);
+            }
+
+            .new button:active {
+                transform: translateY(1px);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+    /* Chat Response Styling */
+    hr {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+        margin: 30px 0;
+    }
+
+    .chat-response {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        max-width: 800px;
+        margin: 30px auto 0;
+    }
+
+    div {
+        margin-bottom: 15px;
+        line-height: 1.6;
+        font-size: 1.05rem;
+    }
+
+        div strong {
+            color: #0a3c6e;
+            font-weight: 600;
+        }
+
+    /* User message styling */
+    .user {
+        background-color: #e0f0ff;
+        padding: 15px 20px;
+        border-radius: 15px 15px 15px 0;
+        color: #064b85;
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+        .user::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #e0f0ff;
+        }
+
+    /* Bot message styling */
+    .bot {
+        background-color: #0e88e2;
+        padding: 15px 20px;
+        border-radius: 15px 15px 0 15px;
+        color: white;
+        position: relative;
+        margin-left: 20px;
+    }
+
+        .bot::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #0e88e2;
+        }
+
+
+    /* Add a chat icon to the button */
+    .new button::before {
+        content: "\f4ad";
+        font-family: "Font Awesome 6 Free";
+        margin-right: 8px;
+        font-weight: 900;
+    }
+
+    .bot p {
+        max-width: 100%;
+        margin: 10px 0;
+        line-height: 1.5;
+        font-size: 1rem;
+    }
+
+    .bot strong {
+        font-weight: 700;
+        color: #fff; /* or your preferred color */
+    }
+
+    .bot ul {
+        padding-left: 20px;
+        margin: 10px 0;
+    }
+
+    .bot li {
+        margin-bottom: 6px;
+        font-size: 1rem;
+        color: white; /* or adjust */
+    }
+
+</style>
 
 <section class="hero-section live-hero" style="background-image:none !important;">
     <div class="hero-overlay live-overlay"></div>
@@ -20,211 +220,134 @@
             Not sure where to start?<br>
             Our AI Assistant can guide you on:
         </p>
-       
 
-<form method="post" action="/Bot/Index" class="new">
-    <label>Select a Theme:</label>
-    <select name="theme">
-                <option value="How to find and apply for jobs">How to find and apply for jobs</option>
-                <option value="Work">
-                    Writing a simple CV & job application
-                </option>
-                <option value="Integration">What to expect in interviews</option>
-                <option value="General">Workplace basics and workers' rights</option>
-                <option value="Integration">Training opportunities to help you get hired</option>
-    </select><br /><br />
+        <!-- New Streamed Chat Form -->
+        <form id="chatForm" class="new">
+            <label>Select a Theme:</label>
+            <select name="theme" id="theme">
+                <option value="Living">How to find and apply for jobs</option>
+                <option value="Work">Writing a simple CV & job application</option>
+                <option value="Integration">What to expect in interviews / training</option>
+                <option value="General">Workplace basics and general guidance</option>
+            </select>
 
-    <label>Ask a Question:</label><br />
-    <input type="text" name="userMessage" required style="width: 84%;" />
-    <button type="submit">Ask</button>
-</form>
+            <label>Ask a Question:</label><br />
+            <input type="text" name="userMessage" id="userMessage" required style="width: 84%;" />
+            <button type="submit">
+                <i class="fas fa-comment-dots"></i> Ask
+            </button>
+        </form>
 
-@if (ViewBag.Response != null)
-{
-    <hr />
-    <p class="user"><strong>You:</strong> @ViewBag.UserMessage</p>
-            <p class="bot"><strong>Bot:</strong> @ViewBag.Response</p>
-}
+        <hr />
 
+        <div id="chatBox">
+            <!-- Responses will stream here -->
+        </div>
 
-
+        @* Fallback if user came from non-streaming POST *@
+        @if (ViewBag.Response != null)
+        {
+            <p class="user"><strong>You:</strong> @ViewBag.UserMessage</p>
+            <div class="bot">
+                <strong>Bot:</strong> @Html.Raw(ViewBag.Response)
+            </div>
+        }
     </div>
 </section>
+
 <style>
-
-    body {
-        margin:0 !important;
-    }
-/* Form Styling */
-    .new {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-        .new label {
-    display: block;
-    font-weight: 600;
-    color: #0a3c6e;
-    margin-bottom: 8px;
-    font-size: 1.1rem;
-}
-
-        .new select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e0f0ff;
-    border-radius: 8px;
-    background-color: #f0f7ff;
-    color: #064b85;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230a3c6e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: calc(100% - 15px) center;
-    padding-right: 40px;
-}
-
-            .new select:focus {
-    border-color: #0e88e2;
-    box-shadow: 0 0 0 3px rgba(14, 136, 226, 0.2);
-    outline: none;
-}
-
-            .new select option {
-    padding: 10px;
-}
-
-        .new input[type="text"] {
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #e0f0ff;
-    border-radius: 8px;
-    background-color: #f0f7ff;
-    color: #064b85;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
-}
-
-            .new input[type="text"]:focus {
-    border-color: #0e88e2;
-    box-shadow: 0 0 0 3px rgba(14, 136, 226, 0.2);
-    outline: none;
-}
-
-        .new button {
-    background: linear-gradient(135deg, #0e88e2 0%, #064b85 100%);
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-            .new button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    background: linear-gradient(135deg, #0270c4 0%, #0a3c6e 100%);
-}
-
-            .new button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Chat Response Styling */
-hr {
-    border: 0;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
-    margin: 30px 0;
-}
-
-.chat-response {
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    max-width: 800px;
-    margin: 30px auto 0;
-}
-
-p {
-    margin-bottom: 15px;
-    line-height: 1.6;
-    font-size: 1.05rem;
-}
-
-p strong {
-    color: #0a3c6e;
-    font-weight: 600;
-}
-
-/* User message styling */
-.user {
-    background-color: #e0f0ff;
-    padding: 15px 20px;
-    border-radius: 15px 15px 15px 0;
-    color: #064b85;
-    position: relative;
-    margin-bottom: 25px;
-}
-
-.user::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 20px;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #e0f0ff;
-}
-
-/* Bot message styling */
-.bot {
-    background-color: #0e88e2;
-    padding: 15px 20px;
-    border-radius: 15px 15px 0 15px;
-    color: white;
-    position: relative;
-    margin-left: 20px;
-}
-.bot::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    right: 20px;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 10px solid #0e88e2;
-}
-
-
-/* Add a chat icon to the button */
-    .new button::before {
-    content: "\f4ad";
-    font-family: "Font Awesome 6 Free";
-    margin-right: 8px;
-    font-weight: 900;
-}
-
-
-
+    /* existing CSS untouched */
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+    const chatForm = document.getElementById("chatForm");
+    const userInput = document.getElementById("userMessage");
+    const themeInput = document.getElementById("theme");
+    const chatBox = document.getElementById("chatBox");
+
+    chatForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const question = userInput.value.trim();
+      const theme = themeInput.value;
+
+      if (!question) return;
+
+      // Clear previous chat
+      chatBox.innerHTML = "";
+
+      // Show user message
+      const userDiv = document.createElement("div");
+      userDiv.classList.add("chat-message", "user");
+      userDiv.innerHTML = `<strong>You:</strong> ${question}`;
+      chatBox.appendChild(userDiv);
+
+      // Bot response container
+      const botDiv = document.createElement("div");
+      botDiv.classList.add("chat-message", "bot");
+      botDiv.innerHTML = "<strong>Bot:</strong> <span id='botTyping'></span>";
+      chatBox.appendChild(botDiv);
+
+      const botSpan = document.getElementById("botTyping");
+
+      const response = await fetch("/Bot/StreamResponse", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+          userMessage: question,
+          theme: theme
+        })
+      });
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let fullResponse = "";
+
+         while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value);
+      fullResponse += chunk;
+
+      // Show partial text without tags to avoid broken HTML
+      const plainChunk = chunk.replace(/<\/?[^>]+(>|$)/g, "");
+      botSpan.textContent += plainChunk;
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    const cleanHtml = marked.parse(fullResponse);
+         // After receiving fullResponse:
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = cleanHtml;
+
+    // Remove empty <p> and <li> tags
+    tempDiv.querySelectorAll("p, li").forEach(el => {
+      if (!el.textContent.trim()) el.remove();
+    });
+
+    // Join all <p> tags content into one paragraph with spaces:
+    const paragraphs = [...tempDiv.querySelectorAll("p")];
+    if (paragraphs.length > 1) {
+      // Combine all text content of <p> tags into one string, separated by spaces
+      const combinedText = paragraphs.map(p => p.textContent.trim()).join(' ');
+
+      // Clear original container and add one paragraph with combined text
+      tempDiv.innerHTML = `<p>${combinedText}</p>`;
+    }
+
+    // Now render the cleaned and combined HTML:
+    botSpan.innerHTML = tempDiv.innerHTML;
+
+
+
+
+      userInput.value = "";
+    });
+</script>
+
