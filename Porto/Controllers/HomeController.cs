@@ -11,6 +11,9 @@ namespace Porto.Controllers
     public class HomeController : Controller
     {
         private const string CultureCookieName = "UserCulture";
+        private readonly string fromEmail = "jul18simonyan@gmail.com";
+        private readonly string password = "okfnrtxzkzrprbes"; // Gmail App Password
+        private readonly string displayName = "Discover Campanha Website";
 
         public IActionResult Index()
         {
@@ -35,7 +38,7 @@ namespace Porto.Controllers
         [HttpPost]
         public IActionResult ContactUs(string userType, string email, string message)
         {
-            if (!(message.IsNullOrEmpty() && email.IsNullOrEmpty() && userType.IsNullOrEmpty()))
+            if (!userType.IsNullOrEmpty() && !email.IsNullOrEmpty() && !message.IsNullOrEmpty())
             {
                 var currentCulture = Request.Cookies["UserCulture"] ?? "en";
                 var cultureInfo = new System.Globalization.CultureInfo(currentCulture);
@@ -43,47 +46,108 @@ namespace Porto.Controllers
                 Thread.CurrentThread.CurrentUICulture = cultureInfo;
 
                 var subject = AppRes.ContactUsSubject;
-                string body;
+                string body = $@"
+                    <div style='font-family:Segoe UI,Arial,sans-serif;color:#333;padding:20px;'>
+                        <h2 style='color:#007bff;'>Contact Request from Discover Campanha Website</h2>
+                        <p><strong>{AppRes.Email}:</strong> {email}</p>
+                        <p><strong>{AppRes.UserType}:</strong> {userType}</p>
+                        <hr />
+                        <h3>{AppRes.MessageContent}</h3>
+                        <p>{message}</p>
+                        <br/>
+                        <p style='font-size:12px;color:#777;'>This message was sent automatically from the Porto contact form.</p>
+                    </div>";
 
-                body = $"<h1>{AppRes.Email} - {email}</h1>" +
-                $"<h2>{AppRes.UserType} {userType}</h2>" +
-                $"<h2>{AppRes.MessageContent}<h2><br/><p>{message}</p>";
-
-                SendEmail(subject, body);
-
-                return RedirectToAction("Index");
+                try
+                {
+                    SendEmail(subject, body);
+                    TempData["Success"] = "Your message was sent successfully!";
+                }
+                catch (Exception ex)
+                {
+                    // Log it — in production, use a proper logging service (Serilog, NLog, etc.)
+                    System.IO.File.AppendAllText("email_error.log", $"{DateTime.Now}: {ex}\n");
+                    TempData["Error"] = "We couldn’t send your message. Please try again later.";
+                }
             }
-
 
             return RedirectToAction("Index");
         }
-        private readonly string fromEmail = "kurdyangaya@gmail.com";
-        private readonly string password = "iwpo ljnf zqbu ylty";
 
-        public void SendEmail(string subject, string body, string toEmail = "kurdyangaya@gmail.com")
+        private void SendEmail(string subject, string body, string toEmail = "jul18simonyan@gmail.com")
         {
-            var fromAddress = new MailAddress(fromEmail, "Your Name");
+            var fromAddress = new MailAddress(fromEmail, displayName);
             var toAddress = new MailAddress(toEmail);
 
-            var smtp = new SmtpClient
+            using (var smtp = new SmtpClient("smtp.gmail.com", 587))
             {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromEmail, password)
-            };
+                smtp.EnableSsl = true;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(fromEmail, password);
 
-            using (var message = new MailMessage(fromAddress, toAddress)
-            {
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
-            })
-            {
-                smtp.Send(message);
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true
+                })
+                {
+                    smtp.Send(message);
+                }
             }
         }
+        [HttpPost]
+        public IActionResult SubmitCV(IFormFile cvFile, string email)
+        {
+            if (cvFile == null || string.IsNullOrEmpty(email))
+            {
+                TempData["CVError"] = "Please provide both email and CV file.";
+                return RedirectToAction("Work");
+            }
+
+            try
+            {
+                // Convert file to memory stream
+                using (var memoryStream = new MemoryStream())
+                {
+                    cvFile.CopyTo(memoryStream);
+                    memoryStream.Position = 0;
+
+                    // Compose email
+                    var fromAddress = new MailAddress("jul18simonyan@gmail.com", "Discover Campanha Website");
+                    var toAddress = new MailAddress("jul18simonyan@gmail.com"); // website owner's email
+
+                    using (var message = new MailMessage(fromAddress, toAddress))
+                    {
+                        message.Subject = "New CV Submitted via Website";
+                        message.Body = $"A new CV has been submitted by {email}. See the attached file.";
+                        message.IsBodyHtml = true;
+
+                        // Attach the CV
+                        message.Attachments.Add(new Attachment(memoryStream, cvFile.FileName));
+
+                        using (var smtp = new SmtpClient("smtp.gmail.com", 587))
+                        {
+                            smtp.EnableSsl = true;
+                            smtp.UseDefaultCredentials = false;
+                            smtp.Credentials = new NetworkCredential("jul18simonyan@gmail.com", "okfnrtxzkzrprbes");
+                            smtp.Send(message);
+                        }
+                    }
+                }
+
+                TempData["CVSuccess"] = "Your CV has been submitted successfully!";
+            }
+            catch (Exception ex)
+            {
+                System.IO.File.AppendAllText("email_error.log", $"{DateTime.Now}: {ex}\n");
+                TempData["CVError"] = "Failed to send your CV. Please try again later.";
+            }
+
+            return RedirectToAction("Work");
+        }
+
         public IActionResult ChangeLanguage(string lang)
         {
             Response.Cookies.Append(CultureCookieName, lang, new Microsoft.AspNetCore.Http.CookieOptions
