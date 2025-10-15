@@ -1,5 +1,4 @@
-﻿/* Base Styles */
-* {
+﻿* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -18,9 +17,7 @@ body {
     position: relative;
     min-height: 100vh;
 }
-/* Add this to your chat.css file */
 
-/* Avatar with image support */
 .avatar {
     width: 40px;
     height: 40px;
@@ -91,7 +88,6 @@ body {
     object-fit: cover;
 }
 
-/* Different avatar sizes */
 .avatar-sm {
     width: 32px;
     height: 32px;
@@ -104,7 +100,6 @@ body {
     font-size: 18px;
 }
 
-/* Avatar colors based on first letter */
 .avatar-a, .avatar-f, .avatar-k, .avatar-p, .avatar-u, .avatar-z {
     background-color: #4a90e2;
 }
@@ -154,7 +149,6 @@ h2 {
     gap: 20px;
 }
 
-/* Sidebar Styles */
 .sidebar {
     width: 280px;
     flex-shrink: 0;
