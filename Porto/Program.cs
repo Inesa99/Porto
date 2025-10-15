@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.HttpOverrides;
+﻿using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Porto.App.Interfaces;
 using Porto.App.Services;
-using Porto.Data;
 using Porto.Data.Models;
 using Porto.Hubb;
 using Porto.Middleware;

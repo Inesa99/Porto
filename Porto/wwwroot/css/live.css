@@ -1,6 +1,4 @@
-/* Live Page Specific Styles */
 
-/* Hero Section */
 .live-hero {
     position: relative;
     background-image: url('../images/Live/Header.png');
@@ -12,12 +10,12 @@
   
   .live-overlay {
     position: absolute;
-    inset: 0; /* shorthand for top: 0; right: 0; bottom: 0; left: 0; */
+    inset: 0; 
     background: 
       linear-gradient(130deg, #001C78 6.8%, rgba(0, 28, 120, 0.116) 95.83%),
       linear-gradient(120deg,rgba(0, 0, 0, 0) 0%, rgba(18, 148, 66, 0.735) 0%);
     background-blend-mode: overlay;
-    pointer-events: none; /* optional: lets clicks pass through */
+    pointer-events: none;
   }
   
 
@@ -65,7 +63,6 @@
     margin-bottom: 0;
 }
 
-/* Chatbot Section */
 .chatbot-section {
     background: linear-gradient(180deg, #EDF5FF 0%, #D6E8FF 100%);
     padding: 60px 0 80px;
@@ -172,13 +169,11 @@
     background: #003371;
 }
 
-/* Font Awesome Icons (temporary solution) */
 .card-icon i {
     font-size: 24px;
     color: #00428C;
 }
 
-/* Responsive Styles */
 @media (max-width: 1199px) {
     .live-hero h1 {
         font-size: 38px;
