@@ -1,8 +1,5 @@
-/* Integrate Page Specific Styles */
-
-/* Hero Section */
 .integrate-hero {
-    background-image: url('../images/Integrate/header.png');
+    background-image: url('../Images/Integrate/header.png');
     min-height: 80vh;
     position: relative;
 }
@@ -73,7 +70,6 @@
     margin-top: 2px;
 }
 
-/* Events CTA Section */
 .events-cta-section {
     background-color: white;
     padding: 40px 0;
@@ -138,7 +134,6 @@
     color: #00428C;
 }
 
-/* Community Events Map Section */
 .events-map-section {
     background: linear-gradient(180deg, #7fb9ff 0%, #4d94ff 100%);
     padding: 50px 0 60px;
@@ -181,7 +176,7 @@
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     position: relative;
-    background-image: url('../images/Integrate/Frame\ 2431.png');
+    background-image: url('../Images/Integrate/Frame\ 2431.png');
     background-size: cover;
     background-repeat: no-repeat;
 
@@ -225,7 +220,6 @@
     color: white;
 }
 
-/* Chat & Connect Section */
 .chat-connect-section {
     background-color: #d6e8ff;
     padding: 50px 0 60px;

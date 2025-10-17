@@ -77,6 +77,27 @@ namespace Porto.Controllers
                         string token = chunk?.response;
                         if (!string.IsNullOrEmpty(token))
                         {
+                           
+                            token = token.Replace("\n", " ");
+
+                            await Response.WriteAsync(token);
+                            await Response.Body.FlushAsync();
+                        }
+                    }
+                    catch { }
+                }
+            }
+
+            {
+                var line = await reader.ReadLineAsync();
+                if (!string.IsNullOrWhiteSpace(line))
+                {
+                    try
+                    {
+                        dynamic chunk = JsonConvert.DeserializeObject(line);
+                        string token = chunk?.response;
+                        if (!string.IsNullOrEmpty(token))
+                        {
                             var html = Markdown.ToHtml(token);
                             await Response.WriteAsync(html);
                             await Response.Body.FlushAsync();
