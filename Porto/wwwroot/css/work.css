@@ -2,7 +2,7 @@
 
 /* Hero Section */
 .work-hero {
-    background-image: url('../images/WorkHeader.png');
+    background-image: url('../Images/WorkHeader.png');
     min-height: 80vh;
     position: relative;
 }
@@ -193,7 +193,7 @@
 .submit-cv-section {
     background-color: #ffffff;
     padding: 148px 0;
-    background-image: url('../images/Frame\ 2429.png');
+    background-image: url('../Images/Frame\ 2429.png');
     background-size: cover;
     background-position: center;
 }

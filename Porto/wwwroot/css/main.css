@@ -48,7 +48,7 @@ a:hover {
     padding: 0 0 120px;
     overflow: hidden;
     min-height: 100vh;
-    background-image: url('../images/header.png');
+    background-image: url('../Images/header.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -286,7 +286,7 @@ header {
     background: linear-gradient(0deg, #FFFFFF, #FFFFFF),
 linear-gradient(143.45deg, rgba(0, 66, 140, 0) 28.91%, rgba(0, 66, 140, 0.3) 93.83%);
 
-    background-image: url("../images/Group.png");
+    background-image: url("../Images/Group.png");
 }
 
 .community-section h3 {
@@ -311,7 +311,7 @@ linear-gradient(143.45deg, rgba(0, 66, 140, 0) 28.91%, rgba(0, 66, 140, 0.3) 93.
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("../images/EIFBackground.png");
+    background-image: url("../Images/EIFBackground.png");
     background-size: cover;
     background-position: center;
 }

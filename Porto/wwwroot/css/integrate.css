@@ -1,5 +1,5 @@
 .integrate-hero {
-    background-image: url('../images/Integrate/header.png');
+    background-image: url('../Images/Integrate/header.png');
     min-height: 80vh;
     position: relative;
 }
@@ -176,7 +176,7 @@
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     position: relative;
-    background-image: url('../images/Integrate/Frame\ 2431.png');
+    background-image: url('../Images/Integrate/Frame\ 2431.png');
     background-size: cover;
     background-repeat: no-repeat;
 
