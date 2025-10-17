@@ -6,6 +6,7 @@ using Porto.App.Services;
 using Porto.Data.Models;
 using Porto.Hubb;
 using Porto.Middleware;
+using Porto.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +35,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
         options.Scope.Add("profile");
         options.Scope.Add("email");
 
@@ -51,6 +52,11 @@ builder.Services.AddAuthentication()
 builder.Services.AddScoped<IEvent, EventService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHostedService<ChatCleanupService>();
+
+builder.Services.AddSingleton<OllamaOptions>(x => new OllamaOptions(
+    builder.Configuration["Ollama:Model"]!,
+    builder.Configuration["Ollama:BaseUrl"]!
+    ));
 
 // SignalR
 builder.Services.AddSignalR()

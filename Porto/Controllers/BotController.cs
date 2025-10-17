@@ -2,13 +2,20 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Porto.Data.Models;
-using System.Net.Http;
+using Porto.Models;
 using System.Text;
 
 namespace Porto.Controllers
 {
     public class BotController : Controller
     {
+        private OllamaOptions _ollamaOptions;
+
+        public BotController(OllamaOptions ollamaOptions)
+        {
+            _ollamaOptions = ollamaOptions;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -42,7 +49,7 @@ namespace Porto.Controllers
 
             var requestBody = new
             {
-                model = "gemma:2b",
+                model = _ollamaOptions.Model,
                 prompt = prompt,
                 stream = true
             };
@@ -50,7 +57,7 @@ namespace Porto.Controllers
             var json = JsonConvert.SerializeObject(requestBody);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:11434/api/generate")
+            var request = new HttpRequestMessage(HttpMethod.Post, _ollamaOptions.Url)
             {
                 Content = content
             };
@@ -110,7 +117,7 @@ namespace Porto.Controllers
 
             var requestBody = new
             {
-                model = "gemma:2b",
+                model = _ollamaOptions.Model,
                 prompt = prompt,
                 stream = false
             };
@@ -118,7 +125,7 @@ namespace Porto.Controllers
             var json = JsonConvert.SerializeObject(requestBody);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync("http://localhost:11434/api/generate", content);
+            var response = await client.PostAsync(_ollamaOptions.Url, content);
             var result = await response.Content.ReadAsStringAsync();
 
             dynamic data = JsonConvert.DeserializeObject(result);
