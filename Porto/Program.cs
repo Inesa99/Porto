@@ -10,6 +10,21 @@ using Porto.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CorsPolicy",
+                      policy =>
+                      {
+                          policy.WithOrigins("https://localhost:7151",
+                              "http://localhost:5281",
+                              "https://qa-campanha.portodigital.pt/")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials();
+                      }
+    );
+});
+
 // Configure database connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -138,6 +153,7 @@ forwardedOptions.KnownNetworks.Clear(); // allow any reverse proxy (e.g. DevTunn
 forwardedOptions.KnownProxies.Clear();
 
 app.UseForwardedHeaders(forwardedOptions);
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
