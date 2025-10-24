@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Porto.App.Interfaces;
 using Porto.App.Services;
@@ -35,7 +36,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 // Add Identity with roles
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedAccount = true;
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
@@ -67,6 +68,8 @@ builder.Services.AddAuthentication()
 builder.Services.AddScoped<IEvent, EventService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHostedService<ChatCleanupService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 
 builder.Services.AddSingleton<OllamaOptions>(x => new OllamaOptions(
     builder.Configuration["Ollama:Model"]!,

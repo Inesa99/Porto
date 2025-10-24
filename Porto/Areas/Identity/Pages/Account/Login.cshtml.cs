@@ -80,16 +80,18 @@ namespace Porto.Areas.Identity.Pages.Account
                     return Page();
                 }
 
-                // Optional: Require confirmed email
-                // if (!await _userManager.IsEmailConfirmedAsync(user))
-                // {
-                //     ModelState.AddModelError(string.Empty, "Please confirm your email before logging in.");
-                //     return Page();
-                // }
+                if (!await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    ModelState.AddModelError(string.Empty, "Please confirm your email before logging in.");
+                    return Page();
+                }
 
                 // Sign in using ApplicationUser.UserName
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-
+                var result = await _signInManager.PasswordSignInAsync(
+                   user.UserName,
+                   Input.Password,
+                   Input.RememberMe,
+                   lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

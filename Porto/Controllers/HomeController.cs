@@ -11,8 +11,8 @@ namespace Porto.Controllers
     public class HomeController : Controller
     {
         private const string CultureCookieName = "UserCulture";
-        private readonly string fromEmail = "jul18simonyan@gmail.com";
-        private readonly string password = "okfnrtxzkzrprbes"; // Gmail App Password
+        private readonly string fromEmail = "discovercampanha@gmail.com";
+        private readonly string password = "iylimddrebkjnwun"; // Gmail App Password
         private readonly string displayName = "Discover Campanha Website";
 
         public IActionResult Index()
@@ -74,7 +74,7 @@ namespace Porto.Controllers
             return RedirectToAction("Index");
         }
 
-        private void SendEmail(string subject, string body, string toEmail = "jul18simonyan@gmail.com")
+        private void SendEmail(string subject, string body, string toEmail = "discovercampanha@gmail.com")
         {
             var fromAddress = new MailAddress(fromEmail, displayName);
             var toAddress = new MailAddress(toEmail);
@@ -115,8 +115,8 @@ namespace Porto.Controllers
                     memoryStream.Position = 0;
 
                     // Compose email
-                    var fromAddress = new MailAddress("jul18simonyan@gmail.com", "Discover Campanha Website");
-                    var toAddress = new MailAddress("jul18simonyan@gmail.com"); // website owner's email
+                    var fromAddress = new MailAddress("discovercampanha@gmail.com", "Discover Campanha Website");
+                    var toAddress = new MailAddress("discovercampanha@gmail.com"); // website owner's email
 
                     using (var message = new MailMessage(fromAddress, toAddress))
                     {
@@ -131,7 +131,7 @@ namespace Porto.Controllers
                         {
                             smtp.EnableSsl = true;
                             smtp.UseDefaultCredentials = false;
-                            smtp.Credentials = new NetworkCredential("jul18simonyan@gmail.com", "okfnrtxzkzrprbes");
+                            smtp.Credentials = new NetworkCredential("discovercampanha@gmail.com", "iylimddrebkjnwun");
                             smtp.Send(message);
                         }
                     }

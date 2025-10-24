@@ -7,7 +7,7 @@ namespace Porto.Common.ViewModel
     public class LoginViewModel
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
 
         [Required]

@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
+using System.Net.Sockets;
+using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -29,15 +32,37 @@ namespace Porto.Areas.Identity.Pages.Account
 
         public RegisterModel(
      UserManager<ApplicationUser> userManager,
-     IUserStore<ApplicationUser> userStore,
-     SignInManager<ApplicationUser> signInManager,
-     ILogger<RegisterModel> logger)
+    IUserStore<ApplicationUser> userStore,
+    SignInManager<ApplicationUser> signInManager,
+    ILogger<RegisterModel> logger,
+    IEmailSender emailSender)
         {
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
+            _emailSender = emailSender;
+        }
+
+        private bool IsEmailDomainValid(string email)
+        {
+            try
+            {
+                var addr = new MailAddress(email);
+                var host = addr.Host;
+
+                var hostEntry = Dns.GetHostEntry(host);
+                return hostEntry.AddressList.Any();
+            }
+            catch (SocketException)
+            {
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
 
@@ -77,6 +102,12 @@ namespace Porto.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            if (!IsEmailDomainValid(Input.Email))
+            {
+                ModelState.AddModelError(string.Empty, "The email domain is invalid or unreachable. Please use a valid email provider (e.g., Gmail, Outlook).");
+                return Page();
+            }
+
 
             if (ModelState.IsValid)
             {
@@ -91,7 +122,18 @@ namespace Porto.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
-                    
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+                    var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        null,
+                        new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

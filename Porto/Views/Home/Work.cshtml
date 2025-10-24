@@ -22,7 +22,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
+<style>
+    .career-topic-item a {
+        text-decoration: none;
+        color: inherit;
+    }
+</style>
 <body>
     <!-- Hero Section with Integrated Header -->
     <section class="hero-section work-hero">
@@ -63,40 +68,34 @@
                 <p>Our AI Assistant can guide you on:</p>
             </div>
 
-            <div class="career-topics">
-                <div class="career-topic-item">
-                    <button class="career-topic-btn">
-                        How to find and apply for jobs
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                <div class="career-topic-item">
-                    <button class="career-topic-btn">
-                        Writing a simple CV & job application
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                <div class="career-topic-item">
-                    <button class="career-topic-btn">
-                        What to expect in interviews
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                <div class="career-topic-item">
-                    <button class="career-topic-btn">
-                        Workplace basics and workers' rights
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                <div class="career-topic-item">
-                    <button class="career-topic-btn">
-                        Training opportunities to help you get hired
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
+            <div class="career-topics">                      
             @if (SignInManager.IsSignedIn(User))
             {
+                <div class="career-topic-item">
+                    <a asp-controller="Bot" asp-action="Index" class="career-topic-btn">
+                        How to find and apply for jobs <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                <div class="career-topic-item">
+                    <a asp-controller="Bot" asp-action="Index" class="career-topic-btn">
+                        Writing a simple CV & job application <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                <div class="career-topic-item">
+                    <a asp-controller="Bot" asp-action="Index" class="career-topic-btn">
+                        What to expect in interviews <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                <div class="career-topic-item">
+                    <a asp-controller="Bot" asp-action="Index" class="career-topic-btn">
+                        Workplace basics and workers' rights <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+                <div class="career-topic-item">
+                    <a asp-controller="Bot" asp-action="Index" class="career-topic-btn">
+                        Training opportunities to help you get hired <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
             <div class="chat-cta text-center">
                 <p>Ask any job-related question and get instant support!</p>
                 <a asp-controller="Bot" asp-action="Index" class="chat-assistant-btn">Chat With AI Career Assistant</a>
@@ -105,6 +104,34 @@
             }
             else
             {
+
+                    <div class="career-topic-item">
+                        <button class="career-topic-btn" disabled>
+                            How to find and apply for jobs <i class="fas fa-lock ms-2"></i>
+                        </button>
+                    </div>
+                    <div class="career-topic-item">
+                        <button class="career-topic-btn" disabled>
+                            Writing a simple CV & job application <i class="fas fa-lock ms-2"></i>
+                        </button>
+                    </div>
+                    <div class="career-topic-item">
+                        <button class="career-topic-btn" disabled>
+                            What to expect in interviews <i class="fas fa-lock ms-2"></i>
+                        </button>
+                    </div>
+                    <div class="career-topic-item">
+                        <button class="career-topic-btn" disabled>
+                            Workplace basics and workers' rights <i class="fas fa-lock ms-2"></i>
+                        </button>
+                    </div>
+                    <div class="career-topic-item">
+                        <button class="career-topic-btn" disabled>
+                            Training opportunities to help you get hired <i class="fas fa-lock ms-2"></i>
+                        </button>
+                    </div>
+
+                
                 <div class="chat-cta text-center">
                     <button class="chat-assistant-btn" disabled>Chat With AI Career Assistant</button>
                     <div class="chat-access-warning">
