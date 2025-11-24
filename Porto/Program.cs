@@ -66,6 +66,9 @@ builder.Services.AddAuthentication()
 
 // Your other services
 builder.Services.AddScoped<IEvent, EventService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISubcategoryService, SubcategoryService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHostedService<ChatCleanupService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();

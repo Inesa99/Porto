@@ -1,0 +1,47 @@
+﻿@model Porto.Common.ViewModel.Chatbot.SubcategoryViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Edit Subcategory";
+}
+
+<h2>Edit Subcategory</h2>
+
+<div class="form-container">
+    <h2>Edit Subcategory</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label asp-for="CategoryId">Category</label>
+            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories">
+                <option value="">-- Select Category --</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NameEn">Name (EN)</label>
+            <input asp-for="NameEn" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NamePt">Name (PT)</label>
+            <input asp-for="NamePt" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DescriptionEn">Description (EN)</label>
+            <textarea asp-for="DescriptionEn" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DescriptionPt">Description (PT)</label>
+            <textarea asp-for="DescriptionPt" class="form-control"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

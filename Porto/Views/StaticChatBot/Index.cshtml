@@ -14,18 +14,13 @@
     <link href="~/css/live.css" rel="stylesheet" />
     <link href="~/css/main.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/bot.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body style="margin: 0 !important">
-    <!-- Header Navigation -->
-  
-        <div class="container position-relative">
-            <!-- Header/Navigation -->
-            <partial name="_menuPartial" />
-            </div>
+    <div class="container position-relative">
+        <partial name="_menuPartial" />
+    </div>
 
-    <!-- Main Content -->
     <main>
         <div class="container">
             <div class="chatbot-header">
@@ -34,73 +29,159 @@
             </div>
 
             <div class="chatbot-container">
-                <!-- Left side - Main Categories -->
-                <div class="categories">
-                    <div class="category-item" data-category="live">
-                        <div class="icon"><i class="fas fa-home"></i></div>
-                        <div class="text">Housing Opportunities</div>
-                    </div>
-                    <div class="category-item" data-category="education">
-                        <div class="icon"><i class="fas fa-book"></i></div>
-                        <div class="text">Education</div>
-                    </div>
-                    <div class="category-item" data-category="social">
-                        <div class="icon"><i class="fas fa-hands-helping"></i></div>
-                        <div class="text">Social Help</div>
-                    </div>
-                    <div class="category-item" data-category="health">
-                        <div class="icon"><i class="fas fa-heartbeat"></i></div>
-                        <div class="text">Health</div>
-                    </div>
-                    <div class="category-item" data-category="mobility">
-                        <div class="icon"><i class="fas fa-bus"></i></div>
-                        <div class="text">Mobility</div>
-                    </div>
-                    <div class="category-item" data-category="work">
-                        <div class="icon"><i class="fas fa-briefcase"></i></div>
-                        <div class="text">Work</div>
-                    </div>
-                    <div class="category-item" data-category="integrate">
-                        <div class="icon"><i class="fas fa-users"></i></div>
-                        <div class="text">Integrate / Belonging</div>
-                    </div>
+                <!-- Left side - Categories -->
+                <div class="categories" id="categories">
+                    <p>Loading categories...</p>
                 </div>
 
                 <!-- Right side - Chat Area -->
                 <div class="chat-area">
-                    <!-- Subcategories will appear here -->
-                    <div id="subcategories" class="subcategories">
-                        <p>Let's find the right educational support for you.</p>
-                        <p>Are you looking for:</p>
-
-                        <!-- Example subcategories (will be populated by JS) -->
-                        <div class="response-options">
-                            <div class="response-option">
-                                <h4>Schools</h4>
-                                <p>for children or teenagers</p>
-                            </div>
-                            <div class="response-option">
-                                <h4>University</h4>
-                                <p>University or higher education</p>
-                            </div>
-                            <div class="response-option">
-                                <h4>Non-degree Education</h4>
-                                <p>language, skills, job training</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Chat messages will appear here -->
-                    <div id="chat-messages" class="chat-messages">
-                        <!-- Messages will be added here dynamically -->
-                    </div>
+                    <div id="subcategories" class="subcategories"></div>
+                    <div id="chat-messages" class="chat-messages"></div>
                 </div>
             </div>
         </div>
     </main>
 
-   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let currentLanguage = '@currentCulture';
+            let currentCategory = null;
+            let currentSubcategory = null;
+            const categoriesDiv = document.getElementById('categories');
+            const subcategoriesDiv = document.getElementById('subcategories');
+            const chatMessagesDiv = document.getElementById('chat-messages');
+            let chatbotData = {};
 
-    <script src="~/js/bot.js"></script>
+            // Fetch chatbot data from server
+            fetch('/StaticChatBot/GetChatbotData')
+                .then(res => res.json())
+                .then(data => {
+                    chatbotData = {};
+                    data.forEach(cat => {
+                        // Assign unique key for each category based on name
+                        const key = cat.name.en.toLowerCase().replace(/\s+/g, '-');
+                        chatbotData[key] = cat;
+                    });
+                    renderCategories();
+                });
+
+            // Render categories dynamically
+            function renderCategories() {
+                categoriesDiv.innerHTML = '';
+                Object.keys(chatbotData).forEach(key => {
+                    const cat = chatbotData[key];
+                    const div = document.createElement('div');
+                    div.className = 'category-item';
+                    div.setAttribute('data-category', key);
+                    div.innerHTML = `<div class="icon"><i class="fas fa-folder"></i></div>
+                                             <div class="text">${cat.name[currentLanguage]}</div>`;
+                    categoriesDiv.appendChild(div);
+
+                    div.addEventListener('click', () => {
+                        document.querySelectorAll('.category-item').forEach(c => c.classList.remove('active'));
+                        div.classList.add('active');
+                        currentCategory = key;
+                        currentSubcategory = null;
+                        showSubcategories(key);
+                        chatMessagesDiv.innerHTML = '';
+                    });
+                });
+            }
+
+            function showSubcategories(categoryKey) {
+                const category = chatbotData[categoryKey];
+                if (!category) return;
+
+                let html = `<p>Select a topic:</p><div class="response-options">`;
+                category.subcategories.forEach(sub => {
+                    html += `<div class="response-option" data-subcategory="${sub.id}">
+                                        <h4>${sub.name[currentLanguage]}</h4>
+                                        <p>${sub.description[currentLanguage]}</p>
+                                     </div>`;
+                });
+                html += `</div>`;
+                subcategoriesDiv.innerHTML = html;
+
+                // Add click events for subcategories
+                document.querySelectorAll('.response-option').forEach(item => {
+                    item.addEventListener('click', function () {
+                        const subId = this.getAttribute('data-subcategory');
+                        currentSubcategory = subId;
+                        showQuestions(categoryKey, subId);
+                    });
+                });
+            }
+
+            function showQuestions(categoryKey, subcategoryId) {
+                const category = chatbotData[categoryKey];
+                if (!category) return;
+                const sub = category.subcategories.find(s => s.id == subcategoryId);
+                if (!sub) return;
+
+                let html = `<button class="back-button" onclick="backToSubcategories()">
+                                        <i class="fas fa-arrow-left"></i> Back
+                                    </button>
+                                    <h3>${sub.name[currentLanguage]}</h3>
+                                    <p>Select a question:</p>
+                                    <div class="questions-list">`;
+                sub.questions.forEach(q => {
+                    html += `<div class="question-item" data-question="${q.id}">
+                                        <p>${q.question[currentLanguage]}</p>
+                                     </div>`;
+                });
+                html += `</div>`;
+                subcategoriesDiv.innerHTML = html;
+
+                document.querySelectorAll('.question-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const qId = item.getAttribute('data-question');
+                        showAnswer(categoryKey, subcategoryId, qId);
+                        chatMessagesDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                });
+            }
+
+            window.backToSubcategories = function () {
+                if (currentCategory) showSubcategories(currentCategory);
+            };
+
+            function showAnswer(categoryKey, subcategoryId, questionId) {
+                const category = chatbotData[categoryKey];
+                const sub = category.subcategories.find(s => s.id == subcategoryId);
+                const q = sub.questions.find(x => x.id == questionId);
+                if (!q) return;
+
+                addMessage('user', q.question[currentLanguage]);
+                addTypingIndicator();
+
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage('bot', q.answer[currentLanguage]);
+                }, 1500);
+            }
+
+            function addMessage(role, content) {
+                const msg = document.createElement('div');
+                msg.className = `message ${role}-message`;
+                msg.textContent = content;
+                chatMessagesDiv.appendChild(msg);
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            }
+
+            function addTypingIndicator() {
+                const typing = document.createElement('div');
+                typing.className = 'message bot-message typing-indicator';
+                typing.innerHTML = '<span></span><span></span><span></span>';
+                chatMessagesDiv.appendChild(typing);
+                chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+            }
+
+            function removeTypingIndicator() {
+                const typing = document.querySelector('.typing-indicator');
+                if (typing) typing.remove();
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,45 @@
+﻿@model Porto.Common.ViewModel.Chatbot.SubcategoryViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Add Subcategory";
+    var categoryId = ViewBag.CategoryId;
+}
+
+<div class="form-container">
+    <h2>Add New Subcategory</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="CategoryId">Category</label>
+            <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control">
+                <option value="">-- Select Category --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="NameEn"></label>
+            <input class="form-control" asp-for="NameEn" />
+        </div>
+        <div class="form-group">
+            <label asp-for="NamePt"></label>
+            <input class="form-control" asp-for="NamePt" />
+        </div>
+        <div class="form-group">
+            <label asp-for="DescriptionEn"></label>
+            <textarea class="form-control" asp-for="DescriptionEn"></textarea>
+        </div>
+        <div class="form-group">
+            <label asp-for="DescriptionPt"></label>
+            <textarea class="form-control" asp-for="DescriptionPt"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+
+</div>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
