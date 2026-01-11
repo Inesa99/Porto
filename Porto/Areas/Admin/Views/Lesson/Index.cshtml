@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Porto.Data.Models.Lesson>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manage Lessons";
+}
+<link rel="stylesheet" href="~/css/admin.css">
+
+<h2>Lessons</h2>
+<div class="form-container">
+
+<p>
+    <a asp-action="Create" asp-route-courseId="@ViewBag.CourseId" class="btn btn-primary">Add Lesson</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order</th>
+            <th>Title</th>
+            <th>Media</th>
+            <th colspan="2">Action Buttons</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var l in Model)
+        {
+            <tr>
+                <td>@l.Order</td>
+                <td>@l.Title</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(l.MediaPath))
+                    {
+                        <a href="@l.MediaPath" target="_blank">
+                            @(l.IsVideo ? "View Video" : "View Image")
+                        </a>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@l.Id" class="btn btn-sm btn-warning">Edit</a>
+                    </td>
+                    <td>
+                    <form asp-action="Delete" asp-route-id="@l.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this lesson?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

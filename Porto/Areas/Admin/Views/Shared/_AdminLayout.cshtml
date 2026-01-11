@@ -65,6 +65,36 @@
                                 <span>Chatbot Questions</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Course" asp-action="Index">
+                                <i class="fas fa-video-camera"></i>
+                                <span>Video Courses</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="CourseType" asp-action="Index">
+                                <i class="fas fa-code"></i>
+                                <span>Course Types</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Lesson" asp-action="Index">
+                                <i class="fas fa-book"></i>
+                                <span>Lessons</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="ProjectType" asp-action="Index">
+                                <i class="fas fa-filter"></i>
+                                <span>Project Types</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Project" asp-action="Index">
+                                <i class="fas fa-file-text"></i>
+                                <span>Projects</span>
+                            </a>
+                        </li>
 
                     </ul>
                 </div>
@@ -127,5 +157,26 @@
 
 </body>
 </html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtn = document.querySelector(".sidebar-toggle");
+        const sidebar = document.querySelector(".sidebar");
+        const overlay = document.querySelector(".sidebar-overlay");
+
+        toggleBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            overlay.classList.toggle("active");
+            document.body.classList.toggle("sidebar-open");
+        });
+
+        overlay.addEventListener("click", () => {
+            sidebar.classList.remove("open");
+            overlay.classList.remove("active");
+            document.body.classList.remove("sidebar-open");
+        });
+    });
+</script>
+
 <!-- Layout content ... -->
 

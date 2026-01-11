@@ -1,0 +1,262 @@
+﻿@model Porto.Common.ViewModel.Page.PagedViewModel<Porto.Data.Models.Project>
+
+@inject Microsoft.AspNetCore.Identity.UserManager<Porto.Data.Models.ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Projects Page";
+    var currentCulture = Context.Request.Cookies["UserCulture"] ?? "en";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campana - Everything You Need to Live, Work & Belong</title>
+    <link href="~/css/main.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/project.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        .page-item.active .page-link {
+            background-color:black;
+        }
+        .page-link {
+            color: black;
+        }
+     .project-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.project-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Heart button container positioned top-right */
+.heart-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+/* Heart button style */
+.heart-btn {
+    font-size: 1.8rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s;
+    color: #ff2d55; /* full red color */
+}
+
+/* Pop animation */
+.heart-btn.animate {
+    animation: heart-pop 0.5s forwards;
+}
+
+        .modal-backdrop.show {
+            opacity: 0;
+        }
+
+        .modal-backdrop {
+            --bs-backdrop-zindex: 0;
+        }
+
+        .modal-content p, h5, span {
+            color:black;
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+    <!-- Hero Section with Integrated Header -->
+
+    <section class="hero-section project-hero">
+        <div class="hero-overlay project-overlay"></div>
+        <div class="container position-relative">
+            <partial name="_menuPartial" />
+
+            <div class="hero-content">
+                <div class="hero-badge">Projects</div>
+                <h1>Make Your Neighborhood Better Together</h1>
+                <p class="hero-subtitle">
+                    Join thousands of others in proposing ideas and projects for a better community today.
+                </p>
+            </div>
+        </div>
+    </section>
+
+            <section class="projects">
+                <div class="container">
+                    <h2 class="section-title">Some of the Reactant Projects</h2>
+                    <div class="projects-grid">
+                    @foreach (var project in Model.Items)
+                    {
+                    <div class="project-card" data-bs-toggle="modal" data-bs-target="#projectModal-@project.Id">
+                        <div class="project-image">
+                            <img src="@project.ProjectType.ImagePath" alt="@project.ProjectType.Name" />
+                        </div>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form class="vote-form heart-button" data-project-id="@project.Id" method="post" asp-action="Vote">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="heart-btn" aria-label="Vote">🤍</button>
+                            </form>
+                        }
+
+                        <div class="project-content">
+                            <span class="project-tag" style="color:black;">@project.ProjectType.Name</span>
+                            <h3 class="project-title" style="color:black;">@project.Title</h3>
+                            <div class="project-footer">
+                                <span id="votes-@project.Id" class="project-votes" style="color:black;">@project.VotesCount vote</span>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%"></div>
+                                </div>
+                            </div>
+                         
+                        </div>
+                    </div>
+
+                    <!-- Modal for full project description -->
+                    <div class="modal fade" id="projectModal-@project.Id" tabindex="-1" aria-labelledby="projectModalLabel-@project.Id" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="projectModalLabel-@project.Id">@project.Title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    @if (!string.IsNullOrEmpty(project.ProjectType.ImagePath))
+                                    {
+                                        <img src="@project.ProjectType.ImagePath" class="img-fluid rounded" alt="@project.ProjectType.Name" />
+                                    }
+                                </div>
+                                <p class="project-description" style="color:black;">@project.Description</p>
+
+                                <div class="modal-footer">
+                                    <span id="modal-votes-@project.Id" class="project-votes">@project.VotesCount vote</span>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    }
+                               
+                    </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="pagination-container mt-5">
+                    <ul class="pagination justify-content-center">
+
+                        <li class="page-item @(Model.HasPrevious ? "" : "disabled")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-page="@(Model.CurrentPage - 1)">
+                                Previous
+                            </a>
+                        </li>
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@i">
+                                    @i
+                                </a>
+                            </li>
+                        }
+
+                        <li class="page-item @(Model.HasNext ? "" : "disabled")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-page="@(Model.CurrentPage + 1)">
+                                Next
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            }
+
+                </div>
+            </section>
+            <section class="submit-section">
+                <div class="container">
+                    <div class="submit-content">
+                        <div class="submit-pattern">
+                            <img src="~/Images/porto3.png">
+                        </div>
+                        <div class="submit-form">
+                            <h2 class="submit-title">Submit your project</h2>
+                    <p class="submit-description">Support an initiative that promotes sustainability and encourages responsible environmental habits.</p>
+                            <form asp-action="Create" method="get">
+                                <div class="form-row">
+                                    <input type="text" placeholder="Purpose" class="form-input" disabled>
+                            <input type="text" placeholder="Activity Type" class="form-input" disabled>
+                            <input type="date" placeholder="Date" class="form-input" disabled>
+                            <input type="time" placeholder="Time" class="form-input" disabled>
+
+                                </div>
+                                <button type="submit" class="btn-submit">Submit Project</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+</body>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(function () {
+        $(".vote-form").submit(function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var projectId = form.data("project-id");
+            var token = form.find('input[name="__RequestVerificationToken"]').val();
+            var heartBtn = form.find(".heart-btn");
+
+            $.ajax({
+                url: '/Project/Vote',
+                type: 'POST',
+                data: { projectId: projectId, __RequestVerificationToken: token },
+                success: function (res) {
+                    // Update votes count
+                    $("#votes-" + projectId).text("Votes: " + res.votesCount);
+
+                    // Animate heart (pop)
+                    heartBtn.addClass("animate");
+                    heartBtn.text("💖"); // full heart
+
+                    // Remove animation class after animation ends, keep heart visible
+                    setTimeout(function () {
+                        heartBtn.removeClass("animate");
+                        heartBtn.prop("disabled", true); // prevent multiple votes
+                    }, 500);
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText || "You have already voted for this project.");
+                }
+            });
+        });
+    });
+</script>

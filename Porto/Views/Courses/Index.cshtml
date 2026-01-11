@@ -1,0 +1,147 @@
+﻿@model Porto.Common.ViewModel.Page.PagedViewModel<Porto.Data.Models.Course>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Courses Page";
+    var currentCulture = Context.Request.Cookies["UserCulture"] ?? "en";
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campana - Everything You Need to Live, Work & Belong</title>
+    <link href="~/css/main.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/project.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        .page-item.active .page-link {
+            background-color: black;
+        }
+        .page-link {
+            color:black;
+        }
+        .projects-grid a {
+            display: block;
+            text-decoration: none; /* optional */
+            color: inherit; /* so text color stays normal */
+        }
+
+        .projects-grid {
+            display: grid;
+            flex-wrap: wrap;
+            gap: 20px; /* spacing between cards */
+        }
+
+
+
+    </style>
+
+</head>
+
+<body>
+    <section class="hero-section project-hero">
+        <div class="hero-overlay project-overlay"></div>
+        <div class="container position-relative">
+            <partial name="_menuPartial" />
+
+            <div class="hero-content">
+                <div class="hero-badge">Videos</div>
+                <h1>Find What You Need to Live Comfortably in Porto</h1>
+                <p class="hero-subtitle" style="font-size:18px;">
+                    Looking for essential services in Porto?
+                </p>
+                <p class="hero-subtitle" style="margin-bottom:20px;">
+                    <strong>Our smart chatbot is here to help!</strong>
+                </p>
+                <p class="hero-subtitle" style="font-size:18px;">Instantly find information about housing, education, healthcare, job opportunities, and more — all in one place. Just ask, and get the support you need in seconds.</p>
+            </div>
+        </div>
+    </section>
+    <section class="projects">
+        <div class="container">
+    <div class="hero-content mb-5" style="padding:0">
+                <h2 class="section-title" style="text-align:left;">Skills to transform your career and life</h2>
+
+        <div class="course-types mb-4">
+                    <a asp-action="Index" class="btn btn-outline-dark mb-2">All</a>
+
+            @foreach (var type in ViewBag.CourseTypes)
+            {
+                <a asp-action="Index" asp-route-courseTypeId="@type.Id" class="btn btn-outline-secondary me-2 mb-2">
+                    @type.Name
+                </a>
+            }
+        </div>
+    </div>
+
+            <div class="projects-grid">
+                @foreach (var course in Model.Items)
+                {
+                    <a asp-action="Details" asp-route-id="@course.Id" class="col">
+                        <div class="card h-100 shadow-sm">
+                            <div class="project-image">
+                                <img src="@course.CoverImagePath" class="card-img-top" alt="@course.Title" />
+                            </div>
+                            <div class="project-content">
+                                <h5 class="project-title">@course.Title</h5>
+                                <p class="project-tag">@course.CourseType.Name</p>
+                                <p class="project-description">@course.ShortDescription</p>
+                                <div class="mt-2">
+                                    <span class="badge bg-secondary me-1">English</span>
+                                    <span class="badge bg-secondary me-1">@((course.CourseLessons?.Count ?? 0) + " Videos")</span>
+                                    <span class="badge bg-secondary me-1">@((course.CourseLessons?.Sum(cl => cl.Lesson.DurationSeconds) ?? 0) + " Minutes")</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="mt-5">
+                    <ul class="pagination justify-content-center">
+
+                        <li class="page-item @(Model.HasPrevious ? "" : "disabled")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-page="@(Model.CurrentPage - 1)"
+                               asp-route-courseTypeId="@Context.Request.Query["courseTypeId"]">
+                                Previous
+                            </a>
+                        </li>
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                                   asp-action="Index"
+                                   asp-route-page="@i"
+                                   asp-route-courseTypeId="@Context.Request.Query["courseTypeId"]">
+                                    @i
+                                </a>
+                            </li>
+                        }
+
+                        <li class="page-item @(Model.HasNext ? "" : "disabled")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-page="@(Model.CurrentPage + 1)"
+                               asp-route-courseTypeId="@Context.Request.Query["courseTypeId"]">
+                                Next
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            }
+
+    </div>
+</section>
+</body>

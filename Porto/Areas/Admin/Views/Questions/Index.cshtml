@@ -23,7 +23,7 @@
                 <th>Question (PT)</th>
                 <th>Answer (EN)</th>
                 <th>Answer (PT)</th>
-                <th>Actions</th>
+                <th colspan="2">Action Buttons</th>
             </tr>
         </thead>
         <tbody>
@@ -37,7 +37,8 @@
 
                     <td>
                         <a asp-action="Edit" asp-route-id="@q.Id" class="btn btn-sm btn-warning">Edit</a>
-
+                        </td>
+                        <td>
                         <form asp-action="Delete"
                               asp-route-id="@q.Id"
                               asp-route-subcategoryId="@subcategoryId"

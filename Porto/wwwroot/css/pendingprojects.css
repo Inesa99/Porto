@@ -1,0 +1,148 @@
+﻿
+.dashboard-header {
+    padding: 20px;
+}
+
+.page-title {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+/* Grid Layout */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Card */
+.project-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+    .project-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+/* Header */
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .project-header h4 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111827;
+    }
+
+.project-type {
+    background: #eef2ff;
+    color: #3730a3;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Description */
+.project-description {
+    color: #4b5563;
+    line-height: 1.6;
+    font-size: 0.95rem;
+    max-height: 4.8em;
+    overflow: hidden;
+}
+
+/* Meta */
+.project-meta {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+    .project-meta strong {
+        display: block;
+        color: #111827;
+        font-size: 0.95rem;
+    }
+
+/* Actions */
+.project-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+}
+
+    .project-actions a,
+    .project-actions button {
+        flex: 1;
+        padding: 10px 0;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+    }
+
+/* Buttons */
+.btn-edit {
+    background: #fbbf24;
+    color: #1f2937;
+    text-align: center;
+    text-decoration: none;
+}
+
+    .btn-edit:hover {
+        background: #f59e0b;
+    }
+
+.btn-delete {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+    .btn-delete:hover {
+        background: #dc2626;
+    }
+
+.project-actions {
+    display: flex;
+    gap: 12px;
+}
+
+    .project-actions a,
+    .project-actions button,
+    .project-actions form {
+        flex: 1;
+    }
+
+.delete-form {
+    display: flex;
+}
+
+.btn-edit,
+.btn-delete {
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+}

@@ -1,0 +1,46 @@
+﻿@model Porto.Common.ViewModel.CourseFormViewModels.CourseFormViewModel;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manage Categories";
+}
+
+<div class="form-container">
+
+<h2>Edit Course</h2>
+@if (Model.ExistingCover != null)
+{
+    <img src="@Model.ExistingCover" width="180" class="mb-3" />
+}
+
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label>Title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea asp-for="ShortDescription" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Course Type</label>
+        <select asp-for="CourseTypeId" asp-items="@(new SelectList(Model.CourseTypes, "Id", "Name"))" class="form-control"></select>
+    </div>
+
+    <div class="mb-3">
+        <label>Cover Image</label>
+        <input asp-for="CoverImage" type="file" class="form-control" />
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsPublished" class="form-check-input" />
+        <label class="form-check-label">Published?</label>
+    </div>
+
+    <button class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+</div>

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Porto.Data.Models.ProjectType>;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manage Categories";
+}
+<link rel="stylesheet" href="~/css/admin.css">
+
+
+<h2>Project Types</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Add New</a>
+<div class="form-container">
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th colspan="3" style="width:200px;text-align:center;">Action Buttons</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    @(item.IsActive ? "Active" : "Disabled")
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+</td>
+                <td>                   
+<form asp-action="Toggle" asp-route-id="@item.Id" method="post" class="d-inline">
+                        <button class="btn btn-sm btn-secondary">
+                            @(item.IsActive ? "Disable" : "Enable")
+                        </button>
+                    </form>
+                    </td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Are you sure?')">
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

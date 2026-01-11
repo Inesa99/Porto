@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Porto.Data.Models.Project>
+@inject Microsoft.AspNetCore.Identity.UserManager<Porto.Data.Models.ApplicationUser> UserManager
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manage Projects";
+}
+
+<link rel="stylesheet" href="~/css/admin.css">
+<link rel="stylesheet" href="~/css/pendingprojects.css">
+
+<h3 class="page-title">Approved Projects</h3>
+
+<a asp-action="PendingProjects" class="btn btn-primary mb-4">
+    Pending Projects
+</a>
+
+<div class="projects-grid">
+    @foreach (var project in Model)
+    {
+        <div class="project-card">
+            <div class="project-header">
+                <h4>@project.Title</h4>
+                <span class="project-type">
+                    @project.ProjectType?.Name
+                </span>
+            </div>
+
+            <p class="project-description">
+                @project.Description
+            </p>
+
+            <div class="project-meta">
+                <div>
+                    <span>Submitted by</span>
+                    <strong>@project.CreatedByUser?.UserName</strong>
+                </div>
+                <div>
+                    <span>Votes</span>
+                    <strong id="votes-@project.Id">@project.VotesCount</strong>
+                </div>
+            </div>
+
+            <div class="project-actions">
+                <a asp-action="Edit"
+                   asp-route-id="@project.Id"
+                   class="btn-edit">
+                    Edit
+                </a>
+
+                <form asp-action="Delete"
+                      asp-route-id="@project.Id"
+                      method="post"
+                      class="delete-form"
+                      onsubmit="return confirm('Delete this project?');">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn-delete">
+                        Delete
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    }
+</div>

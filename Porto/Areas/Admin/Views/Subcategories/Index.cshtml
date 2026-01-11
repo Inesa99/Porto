@@ -17,7 +17,7 @@
                 <th>Name (PT)</th>
                 <th>Description (EN)</th>
                 <th>Description (PT)</th>
-                <th>Actions</th>
+                <th colspan="2">Action Buttons</th>
             </tr>
         </thead>
         <tbody>
@@ -30,6 +30,8 @@
                     <td>@sub.DescriptionPt</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@sub.Id" class="btn btn-sm btn-warning">Edit</a>
+                       </td>
+                       <td>
                         <form asp-action="Delete" asp-route-id="@sub.Id" method="post" class="d-inline">
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>

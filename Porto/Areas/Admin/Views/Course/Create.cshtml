@@ -1,0 +1,66 @@
+﻿@model Porto.Common.ViewModel.CourseFormViewModels.CourseFormViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manage Categories";
+}
+<div class="form-container">
+
+<h2>Create Course</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label>Title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea asp-for="ShortDescription" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Course Type</label>
+        <select asp-for="CourseTypeId" asp-items="@(new SelectList(Model.CourseTypes, "Id", "Name"))" class="form-control"></select>
+    </div>
+
+    <div class="mb-3">
+        <label>Cover Image</label>
+        <input asp-for="CoverImage" type="file" class="form-control" />
+        @if (!string.IsNullOrEmpty(Model.ExistingCover))
+        {
+            <p>Existing: <img src="@Model.ExistingCover" width="150" /></p>
+        }
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsPublished" class="form-check-input" />
+        <label class="form-check-label">Published?</label>
+    </div>
+
+    <h4>Assign Lessons</h4>
+    <div class="mb-3">
+        <select asp-for="LessonIds" asp-items="@(new MultiSelectList(ViewBag.Lessons, "Id", "Title", Model.LessonIds))" class="form-control" multiple="multiple">
+        </select>
+        <small class="form-text text-muted">Select lessons to assign to this course.</small>
+    </div>
+
+    <button class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>
+
+<hr />
+<p>
+    <a asp-area="Admin" asp-controller="Lesson" asp-action="Create" class="btn btn-secondary mb-3">
+        Add New Lesson
+    </a>
+    <a asp-area="Admin" asp-controller="Lesson" asp-action="Index" class="btn btn-info mb-3">
+        View All Lessons
+    </a>
+</p>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

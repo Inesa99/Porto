@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Porto.Data.Models.Project>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manage Categories";
+}
+<link rel="stylesheet" href="~/css/admin.css">
+<h2>Pending Projects From Users</h2>
+<div class="form-container">
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Created By</th>
+            <th>Created At</th>
+            <th>Votes</th>
+            <th>Action Buttons</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Title</td>
+                <td>@p.ProjectType?.Name</td>
+                <td>@p.CreatedByUser?.UserName</td>
+                <td>@p.CreatedAt.ToString("yyyy-MM-dd")</td>
+                <td>@p.VotesCount</td>
+                <td>
+                    <form asp-action="Approve" asp-route-id="@p.Id" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                            <button class="btn btn-warning">Approve</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

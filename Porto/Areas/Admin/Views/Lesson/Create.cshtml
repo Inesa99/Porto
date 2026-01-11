@@ -1,0 +1,64 @@
+﻿@model Porto.Common.ViewModel.Lessons.LessonViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Create Lesson";
+}
+<link rel="stylesheet" href="~/css/admin.css">
+
+<h2>@ViewData["Title"]</h2>
+<div class="form-container">
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group mb-3">
+            <label>Assign to Courses</label>
+            <select asp-for="CourseIds" asp-items="@(new MultiSelectList(ViewBag.Courses, "Id", "Title"))" multiple class="form-control">
+            </select>
+        </div>
+
+
+        <div class="form-group mb-3">
+            <label asp-for="Order"></label>
+            <input asp-for="Order" class="form-control" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="Media">Video/Image</label>
+            <input asp-for="Media" type="file" class="form-control" />
+            @if (!string.IsNullOrEmpty(Model.ExistingMediaPath))
+            {
+                <p>Existing: <a href="@Model.ExistingMediaPath" target="_blank">View</a></p>
+            }
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="IsVideo" class="form-check-input" />
+            <label asp-for="IsVideo" class="form-check-label">Is Video?</label>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="DurationSeconds"></label>
+            <input asp-for="DurationSeconds" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -36,7 +36,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 // Add Identity with roles
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = true;
+    options.SignIn.RequireConfirmedEmail = true;
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
@@ -72,6 +72,7 @@ builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddHostedService<ChatCleanupService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 
 builder.Services.AddSingleton<OllamaOptions>(x => new OllamaOptions(

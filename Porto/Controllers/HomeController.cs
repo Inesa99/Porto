@@ -12,7 +12,7 @@ namespace Porto.Controllers
     {
         private const string CultureCookieName = "UserCulture";
         private readonly string fromEmail = "discovercampanha@gmail.com";
-        private readonly string password = "iylimddrebkjnwun"; // Gmail App Password
+        private readonly string password = "muiiwjwddbdqtjny";
         private readonly string displayName = "Discover Campanha Website";
 
         public IActionResult Index()
@@ -65,7 +65,6 @@ namespace Porto.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // Log it — in production, use a proper logging service (Serilog, NLog, etc.)
                     System.IO.File.AppendAllText("email_error.log", $"{DateTime.Now}: {ex}\n");
                     TempData["Error"] = "We couldn’t send your message. Please try again later.";
                 }
@@ -108,15 +107,13 @@ namespace Porto.Controllers
 
             try
             {
-                // Convert file to memory stream
                 using (var memoryStream = new MemoryStream())
                 {
                     cvFile.CopyTo(memoryStream);
                     memoryStream.Position = 0;
 
-                    // Compose email
                     var fromAddress = new MailAddress("discovercampanha@gmail.com", "Discover Campanha Website");
-                    var toAddress = new MailAddress("discovercampanha@gmail.com"); // website owner's email
+                    var toAddress = new MailAddress("discovercampanha@gmail.com"); 
 
                     using (var message = new MailMessage(fromAddress, toAddress))
                     {
@@ -124,14 +121,13 @@ namespace Porto.Controllers
                         message.Body = $"A new CV has been submitted by {email}. See the attached file.";
                         message.IsBodyHtml = true;
 
-                        // Attach the CV
                         message.Attachments.Add(new Attachment(memoryStream, cvFile.FileName));
 
                         using (var smtp = new SmtpClient("smtp.gmail.com", 587))
                         {
                             smtp.EnableSsl = true;
                             smtp.UseDefaultCredentials = false;
-                            smtp.Credentials = new NetworkCredential("discovercampanha@gmail.com", "iylimddrebkjnwun");
+                            smtp.Credentials = new NetworkCredential("discovercampanha@gmail.com", "muiiwjwddbdqtjny");
                             smtp.Send(message);
                         }
                     }

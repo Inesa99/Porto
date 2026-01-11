@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Porto.Data.Models.Course>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Manage Courses";
+}
+<div class="form-container">
+
+    <h2>Courses</h2>
+
+    <p>
+        <a asp-action="Create" class="btn btn-primary mb-3">Add Course</a>
+    </p>
+
+    <table class="table table-hover table-responsive">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Published</th>
+                <th>Lessons</th>
+                <th colspan="2">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                var lessons = c.CourseLessons?.Select(cl => cl.Lesson).ToList() ?? new List<Porto.Data.Models.Lesson>();
+                <tr>
+                    <td>@c.Title</td>
+                    <td>@c.CourseType?.Name</td>
+                    <td>@(c.IsPublished ? "Yes" : "No")</td>
+                    <td>@lessons.Count</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@c.Id" class="btn btn-sm btn-warning">Edit</a>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="Delete" asp-route-id="@c.Id" style="display:inline">
+                            <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this course?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

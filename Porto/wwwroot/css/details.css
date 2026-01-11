@@ -1,0 +1,58 @@
+﻿.projects-grid a {
+    display: block;
+    text-decoration: none; /* optional */
+    color: inherit; /* so text color stays normal */
+}
+
+.projects-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* spacing between cards */
+}
+
+.lessons-section {
+    background-color: #f8f9fa;
+}
+
+    .lessons-section h2 {
+        font-weight: 700;
+        color: #343a40;
+    }
+
+.lessons-list .lesson-item {
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+    .lessons-list .lesson-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .lessons-list .lesson-item h5 {
+        font-weight: 600;
+    }
+
+    .lessons-list .lesson-item p {
+        font-size: 0.9rem;
+    }
+
+.modal-body video,
+.modal-body img {
+    max-height: 500px;
+    object-fit: contain;
+}
+
+.modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.modal-backdrop.show {
+    opacity: 0;
+}
+
+.modal-backdrop {
+    --bs-backdrop-zindex: 0;
+}

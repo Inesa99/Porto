@@ -1,0 +1,43 @@
+﻿@model Porto.Common.ViewModel.Project.ProjectTypeVM;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Edit Project Type";
+}
+
+<link rel="stylesheet" href="~/css/admin.css">
+<div class="form-container">
+
+<h2>Edit Project Type</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ExistingImagePath" />
+
+    <div class="form-group mb-3">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Change Image</label>
+        <input asp-for="Image" type="file" class="form-control" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ExistingImagePath))
+    {
+        <div class="mb-3">
+            <label>Current Image</label><br />
+            <img src="@Model.ExistingImagePath"
+                 style="height:90px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.15);" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+</form>
+</div>

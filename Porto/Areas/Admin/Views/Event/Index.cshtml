@@ -22,7 +22,7 @@
             <th>Location</th>
             <th>Organizer</th>
             <th>Contact Info</th>
-            <th>Actions</th>
+            <th colspan="2">Action Buttons</th>
         </tr>
     </thead>
     <tbody>
@@ -37,7 +37,8 @@
                 <td>@ev.ContactInfo</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@ev.Id" class="btn btn-sm btn-warning">Edit</a>
-
+</td>
+<td>
                     <form asp-action="Delete" asp-route-id="@ev.Id" method="post" class="d-inline">
                         <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                     </form>
