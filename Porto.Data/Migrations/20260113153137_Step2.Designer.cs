@@ -12,8 +12,8 @@ using Porto.Data.Models;
 namespace Porto.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20260110190415_courseLessonRElationChange")]
-    partial class courseLessonRElationChange
+    [Migration("20260113153137_Step2")]
+    partial class Step2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -11,21 +11,6 @@ using Porto.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "CorsPolicy",
-                      policy =>
-                      {
-                          policy.WithOrigins("https://localhost:7151",
-                              "http://localhost:5281",
-                              "https://qa-campanha.portodigital.pt/")
-                          .AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .AllowCredentials();
-                      }
-    );
-});
-
 // Configure database connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -87,6 +72,26 @@ builder.Services.AddSignalR()
         options.ClientTimeoutInterval = TimeSpan.FromMinutes(1);
     });
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                              ForwardedHeaders.XForwardedProto |
+                              ForwardedHeaders.XForwardedHost;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
+// Add CORS if needed
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
@@ -136,7 +141,9 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+app.UseForwardedHeaders();
+
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
@@ -160,7 +167,7 @@ forwardedOptions.KnownNetworks.Clear(); // allow any reverse proxy (e.g. DevTunn
 forwardedOptions.KnownProxies.Clear();
 
 app.UseForwardedHeaders(forwardedOptions);
-app.UseCors("CorsPolicy");
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();

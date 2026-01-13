@@ -6,26 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Porto.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Step2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
-        {                 
-
-            migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NamePt = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
+        {
             migrationBuilder.CreateTable(
                 name: "CourseTypes",
                 columns: table => new
@@ -38,7 +23,25 @@ namespace Porto.Data.Migrations
                 {
                     table.PrimaryKey("PK_CourseTypes", x => x.Id);
                 });
-       
+
+            migrationBuilder.CreateTable(
+                name: "Lessons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MediaPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsVideo = table.Column<bool>(type: "bit", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    DurationSeconds = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lessons", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ProjectTypes",
                 columns: table => new
@@ -46,34 +49,12 @@ namespace Porto.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProjectTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Subcategories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NamePt = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DescriptionEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DescriptionPt = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subcategories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Subcategories_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,6 +77,33 @@ namespace Porto.Data.Migrations
                         name: "FK_Courses_CourseTypes_CourseTypeId",
                         column: x => x.CourseTypeId,
                         principalTable: "CourseTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserLessonProgresses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LessonId = table.Column<int>(type: "int", nullable: false),
+                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLessonProgresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserLessonProgresses_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserLessonProgresses_Lessons_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "Lessons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -132,49 +140,27 @@ namespace Porto.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Questions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SubcategoryId = table.Column<int>(type: "int", nullable: false),
-                    QuestionEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    QuestionPt = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AnswerEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AnswerPt = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Questions_Subcategories_SubcategoryId",
-                        column: x => x.SubcategoryId,
-                        principalTable: "Subcategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Lessons",
+                name: "CourseLessons",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CourseId = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MediaPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsVideo = table.Column<bool>(type: "bit", nullable: false),
-                    Order = table.Column<int>(type: "int", nullable: false),
-                    DurationSeconds = table.Column<int>(type: "int", nullable: true)
+                    LessonId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lessons", x => x.Id);
+                    table.PrimaryKey("PK_CourseLessons", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Lessons_Courses_CourseId",
+                        name: "FK_CourseLessons_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseLessons_Lessons_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "Lessons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -206,44 +192,20 @@ namespace Porto.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UserLessonProgresses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LessonId = table.Column<int>(type: "int", nullable: false),
-                    CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserLessonProgresses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserLessonProgresses_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserLessonProgresses_Lessons_LessonId",
-                        column: x => x.LessonId,
-                        principalTable: "Lessons",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseLessons_CourseId",
+                table: "CourseLessons",
+                column: "CourseId");
 
-           
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseLessons_LessonId",
+                table: "CourseLessons",
+                column: "LessonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_CourseTypeId",
                 table: "Courses",
                 column: "CourseTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Lessons_CourseId",
-                table: "Lessons",
-                column: "CourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Projects_CreatedByUserId",
@@ -254,16 +216,6 @@ namespace Porto.Data.Migrations
                 name: "IX_Projects_ProjectTypeId",
                 table: "Projects",
                 column: "ProjectTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Questions_SubcategoryId",
-                table: "Questions",
-                column: "SubcategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Subcategories_CategoryId",
-                table: "Subcategories",
-                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserLessonProgresses_LessonId",
@@ -290,10 +242,8 @@ namespace Porto.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-           
-
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "CourseLessons");
 
             migrationBuilder.DropTable(
                 name: "UserLessonProgresses");
@@ -301,9 +251,8 @@ namespace Porto.Data.Migrations
             migrationBuilder.DropTable(
                 name: "Votes");
 
-
             migrationBuilder.DropTable(
-                name: "Subcategories");
+                name: "Courses");
 
             migrationBuilder.DropTable(
                 name: "Lessons");
@@ -312,16 +261,10 @@ namespace Porto.Data.Migrations
                 name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "Courses");
+                name: "CourseTypes");
 
             migrationBuilder.DropTable(
                 name: "ProjectTypes");
-
-            migrationBuilder.DropTable(
-                name: "CourseTypes");
         }
     }
 }

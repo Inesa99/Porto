@@ -117,8 +117,25 @@
             };
             return colors[letter.toLowerCase()] || "#4a90e2";
         }
+                // Auto-detect base URL
+        function getBaseUrl() {
+            const isHttps = window.location.protocol === 'https:';
+            const port = window.location.port ? `:${window.location.port}` : '';
 
-        const connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
+            // If you're behind a proxy, use relative URL
+            return isHttps ? '' : `${window.location.protocol}//${window.location.hostname}${port}`;
+        }
+
+        const hubUrl = getBaseUrl() + '/chathub';
+        const connection = new signalR.HubConnectionBuilder().withUrl(hubUrl, {
+        skipNegotiation: false,
+        transport: signalR.HttpTransportType.WebSockets | 
+                  signalR.HttpTransportType.ServerSentEvents | 
+                  signalR.HttpTransportType.LongPolling
+        })
+        .withAutomaticReconnect()
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
 
         connection.on("ReceiveMessage", (user, message, timestamp) => {
             console.log("Received:", user, message, timestamp);
